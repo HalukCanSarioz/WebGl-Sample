@@ -1,0 +1,81 @@
+<html>
+
+<body>
+   <canvas id="glcanvas" width="512" height="512"></canvas>
+</body>
+
+	<div>
+	Kirmizi  0 <input id="kirmizi" type="range"
+	min="0" max="1" step="0.1" value="0" />10
+	</div>
+	
+	<div>
+	Mavi 0 <input id="mavi" type="range"
+	min="0" max="1" step=".1" value="0" />10
+	</div>
+	
+	<div>
+	Yesil  0<input id="yesil" type="range"
+	min="0" max="1" step="0.1" value="0" />10
+	</div>
+	
+	<select id="Kaydirma" size="4" >
+		<option value="0">Yukarı Çıkar</option>
+		<option value="0">Asagı İndır</option>
+		<option value="0">Sağa Kaydır </option>
+		<option value="0">Sola Kaydır </option>
+
+	</select>	
+	
+	<select id="Boyut" size="2" >
+			<option value="0">Boyu Azaltma</option>
+			<option value="1">Boyutu Arttırma</option>
+	</select>
+
+	<select id="Çevirme" size ="2">
+			<option value="0">Saat Yönünde Döndürme</option>
+			<option value="1">Saat Yönünün Tersine Döndürme</option>
+	</select>
+	
+<script id="vertex-shader" type="x-shader/x-vertex">
+ attribute vec4 vPosition;
+ 
+ uniform float theta;
+ uniform float yatayyer;
+ uniform float sutunyer;
+ uniform float katlama;
+ 
+   void main(){
+    gl_Position.x = cos(theta) * vPosition.x - sin(theta) * vPosition.y;
+	gl_Position.y = sin(theta) * vPosition.x + cos(theta) * vPosition.y;
+	gl_Position.z = 0.0;
+	gl_Position.w = 1.0;
+    
+	gl_Position.x = gl_Position.x + yatayyer;
+	gl_Position.y = gl_Position.y + sutunyer;
+	
+	gl_Position.x =(gl_Position.x)*katlama;
+    gl_Position.y =(gl_Position.y)*katlama; 
+   }
+   
+</script>
+
+<script id="fragment-shader" type="x-shader/x-fragment"> 
+   precision mediump float; 
+   
+   uniform float maviderece;
+   uniform float kirmiziderece;
+   uniform float yesilderece;
+  
+   void main() {
+	
+	  gl_FragColor=vec4(kirmiziderece,yesilderece,maviderece,1.0);	
+   }
+</script>
+
+<script src="18290053.js"></script>
+<script src="./src/initShaders.js"></script>
+<script src="./src/MV.js"></script>
+<script src="./src/webgl-utils.js"></script>
+
+</html>

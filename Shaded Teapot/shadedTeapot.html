@@ -1,0 +1,84 @@
+<html>
+<script id="vertex-shader" type="x-shader/x-vertex">
+
+attribute vec4 vPosition;
+attribute vec3 vNormal;
+
+varying vec4 fColor;
+
+uniform mat4 modelViewMatrix;
+uniform mat4 projectionMatrix;
+
+uniform vec4 ambientProduct, diffuseProduct, specularProduct;
+uniform vec4 lightDirection;
+uniform float shininess;
+
+void main()
+{
+    vec3 pos = -(modelViewMatrix* vPosition).xyz;
+	
+	//fixed light
+	vec3 L = normalize(-lightDirection.xyz);
+	vec3 V = normalize(-pos);
+	vec3 H = normalize(L+V);
+	
+	vec4 NN =vec4(vNormal, 0);
+	
+	//Transform vertex normal şnto eye coordinates
+	vec3 N = normalize( (modelViewMatrix* NN).xyz);
+	
+	//Compute terms in the illumination equation
+	vec4 ambient = ambientProduct;
+	
+	float dotLN = dot(L, N);
+	float diffuseCosAngle = max(dotLN, 0.0);
+	vec4 diffuse = diffuseCosAngle* specularProduct;
+	
+	float specularCosAngle = pow(max(dot(N, H), 0.0),shininess);
+	vec4 specular =specularCosAngle* specularProduct; 
+	
+	if(dotLN< 0.0)
+	{
+		//ambient = vec4(0.0, 1.0, 0.0, 1.0);
+		//diffuse = vec4(0.0, 0.0 ,0.0, 1.0);
+		specular = vec4(0.0, 0.0, 0.0, 1.0);
+	}
+	
+	gl_Position = projectionMatrix* modelViewMatrix* vPosition;
+	fColor = ambient + diffuse + specular;
+	
+	fColor.a =1.0;
+}
+</script>
+
+<script id="fragment-shader" type="x-shader/x-fragment">
+
+precision mediump float;
+
+varying vec4 fColor;
+
+void main()
+{
+    gl_FragColor = fColor;
+}
+</script>
+
+<p> </p>
+<button id = "XButton">Rotate around X</button>
+<button id = "YButton">Rotate around Y</button>
+<button id = "ZButton">Rotate around Z</button>
+<p> </p>
+<!--button id = "Button4">Increase Subdivisions</button>
+<button id = "Button5">Decrease Subdivisions</button-->
+
+<script type="text/javascript" src="./src/webgl-utils.js"></script>
+<script type="text/javascript" src="./src/initShaders.js"></script>
+<script type="text/javascript" src="./src/MV.js"></script>
+<script type="text/javascript" src="shadedTeapot.js"></script>
+
+<body>
+<canvas id="gl-canvas" width="512" height="512">
+Oops ... your browser doesn't support the HTML5 canvas element
+</canvas>
+</body>
+</html>

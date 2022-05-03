@@ -1,0 +1,63 @@
+<html>
+<body>
+<p> Use <b>arrows</b> to move (translate) the letters </p>
+<canvas id="glcanvas" width="512" height="512">
+   <!-- The following message is displayed if the browser doesn’t
+     -- support HTML5 -->
+      Sorry; your web browser does not support HTML5’s canvas element.
+</canvas>
+
+<select id="mymenu" size="4">
+<option value="0">Make letters bigger</option>
+<option value="1">Make letters smaller</option>
+<option value="2">Rotate clockwise</option>
+<option value="3">Rotate counter-clockwise</option>
+</select>
+
+<div>
+Color of letters:
+</div>
+<div>
+0 
+<input id="redSlider" type="range" min="0" max="1" step="0.05" value="0" /> 
+1 for Red 
+</div>
+<div>
+0 
+<input id="greenSlider" type="range" min="0" max="1" step="0.05" value="0" /> 
+1 for Green 
+</div>
+<div>
+0 
+<input id="blueSlider" type="range" min="0" max="1" step="0.05" value="1" /> 
+1 for Blue
+</div>
+
+
+
+</body>
+
+<script id="vertex-shader" type="x-shader/x-vertex">
+   attribute vec4 vPosition;
+   uniform mat4 vMVmatrix;
+   
+   void main(){
+        gl_Position = vMVmatrix * vPosition;
+   }
+</script>
+
+<script id="fragment-shader" type="x-shader/x-fragment"> 
+   precision mediump float;
+   uniform vec4 fColor;
+   
+   void main() {
+      gl_FragColor = fColor;
+   }
+</script>
+
+<script src="./src/initShaders.js"></script>
+<script src="./src/MV.js"></script>
+<script src="./src/webgl-utils.js"></script>
+<script src="odev1.js"></script>
+
+</html>
